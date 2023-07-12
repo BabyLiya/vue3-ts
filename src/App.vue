@@ -1,14 +1,15 @@
 <template>
-  <div class="box"><h1>App</h1></div>
+  <div>
+
+  </div>
 </template>
 
-<script setup lang="ts">
-const str = 'love'
+<script lang="ts">
+for(let i=0;i<100;i++) {
+  console.log(i)
+}
 </script>
 
-<style scoped lang="scss">
-.box {
-  width: 600px;
-  height: 400px;
-}
+<style scoped>
+
 </style>
