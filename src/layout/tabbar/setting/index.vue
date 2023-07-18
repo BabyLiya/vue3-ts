@@ -10,18 +10,14 @@
     />
     <el-dropdown>
       <span class="el-dropdown-link">
-        {{userStore.username}} 
+        {{ userStore.username }}
         <el-icon class="el-icon--right">
           <arrow-down />
         </el-icon>
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item>Action 1</el-dropdown-item>
-          <el-dropdown-item>Action 2</el-dropdown-item>
-          <el-dropdown-item>Action 3</el-dropdown-item>
-          <el-dropdown-item disabled>Action 4</el-dropdown-item>
-          <el-dropdown-item divided>Action 5</el-dropdown-item>
+          <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -29,11 +25,15 @@
 </template>
 <script setup lang="ts">
 import { FullScreen, Refresh, Aim } from '@element-plus/icons-vue'
+import { useRouter,useRoute } from 'vue-router'
 import useUserStore from '@/store/modules/user'
 import useLayoutSettingStore from '@/store/modules/setting'
+
 const layoutSettingStore = useLayoutSettingStore()
 const userStore = useUserStore()
-console.log(userStore.username)
+const router = useRouter()
+const route = useRoute()
+
 
 const handleReflash = () => {
   layoutSettingStore.reflash = !layoutSettingStore.reflash
@@ -49,8 +49,12 @@ const fullScreen = () => {
   } else {
     document.exitFullscreen()
   }
+}
 
-  // console.log(document.fullscreenElement)
+// 退出登录
+const logout = () => {
+  userStore.userLogout()
+  router.push({path: '/login', query: {redirect: route.path}})
 }
 </script>
 <script lang="ts">

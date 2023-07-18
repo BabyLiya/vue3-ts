@@ -49,10 +49,12 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import useUserStore from '@/store/modules/user'
-import { useRouter } from 'vue-router'
+import { useRouter,useRoute } from 'vue-router'
 import { ElNotification } from 'element-plus'
 import { getTime } from '@/utils/time'
+
 const router = useRouter()
+const route = useRoute()
 
 const useStore = useUserStore()
 
@@ -115,7 +117,9 @@ const handleLogin = async () => {
   loading.value = true
   try {
     await useStore.userLogin(loginForm)
-    router.push('/')
+    // 判断登录的时候，路由路径中是否含有{query}参数
+    let redirect: any = route.query.redirect
+    router.push({path: redirect || '/'})
     ElNotification({
       type: 'success',
       message: '欢迎回来',

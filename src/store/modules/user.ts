@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 // 引入接口
 import { reqLogin, reqUserInfo } from '@/api/user/index'
+import { REMOVE_TOKEN } from '@/utils/token'
 import type {
   loginForm,
   loginResponseData,
@@ -45,9 +46,16 @@ let useUserStore = defineStore('User', {
         this.username = res.data.checkUser.username
         this.avatar = res.data.checkUser.avatar
       } else {
-        
       }
+    },
+    // 退出登录
+    userLogout() {
+      this.token = '',
+      this.username = '',
+      this.avatar = ''
+      REMOVE_TOKEN()
     }
+
   },
   getters: {},
 })
