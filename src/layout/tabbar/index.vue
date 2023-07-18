@@ -7,7 +7,6 @@
 <script setup lang="ts">
 import Breakcrumb from './breakcrumb/index.vue'
 import Setting from './setting/index.vue'
-
 </script>
 
 <style lang="scss" scoped>
@@ -18,6 +17,6 @@ import Setting from './setting/index.vue'
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
-  background: #D8D1CE;
+  background: #d8d1ce;
 }
 </style>

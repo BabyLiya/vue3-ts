@@ -88,13 +88,13 @@ export default {
     }
   }
   .layout_main {
+    padding: 20px;
     position: absolute;
     width: calc(100% - $base-menu-width);
     height: calc(100% - $base-tabbar-height);
     background: yellowgreen;
     left: $base-menu-width;
     top: $base-tabbar-height;
-    padding: 20px;
     overflow: auto;
     transition: all 0.3s;
     &.fold {

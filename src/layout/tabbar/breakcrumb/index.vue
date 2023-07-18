@@ -40,8 +40,13 @@ export default {
 <style lang="scss" scoped>
 .tabbar-left {
   display: flex;
+  
   .el-icon {
     cursor: pointer;
+  }
+  .el-icon {
+    margin-right: 5px;
+    vertical-align: bottom;
   }
 }
 </style>

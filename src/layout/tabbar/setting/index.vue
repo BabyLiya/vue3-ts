@@ -28,11 +28,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import {
-  FullScreen,
-  Refresh,
-  Aim,
-} from '@element-plus/icons-vue'
+import { FullScreen, Refresh, Aim } from '@element-plus/icons-vue'
 
 import useLayoutSettingStore from '@/store/modules/setting'
 const layoutSettingStore = useLayoutSettingStore()
@@ -40,25 +36,24 @@ const layoutSettingStore = useLayoutSettingStore()
 const handleReflash = () => {
   layoutSettingStore.reflash = !layoutSettingStore.reflash
 }
-
-
 </script>
 <script lang="ts">
 export default {
-  name: 'Setting'
+  name: 'Setting',
 }
 </script>
 
 <style lang="scss" scoped>
 .tabbar-right {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .el-button {
-        margin: 0 5px;
-    }
-   .el-dropdown {
-    margin-left: 10px;
-   }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .el-button {
+    margin: 0 5px;
   }
+  .el-dropdown {
+    margin-left: 10px;
+    cursor: pointer;
+  }
+}
 </style>
