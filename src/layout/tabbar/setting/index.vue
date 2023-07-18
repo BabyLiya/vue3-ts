@@ -1,7 +1,7 @@
 <template>
   <div class="tabbar-right">
     <el-button @click="handleReflash" :icon="Refresh" circle />
-    <el-button :icon="FullScreen" circle />
+    <el-button @click="fullScreen" :icon="FullScreen" circle />
     <el-button :icon="Aim" circle />
     <img
       style="width: 32px; height: 32px; border-radius: 50%; margin: 0 5px"
@@ -35,6 +35,20 @@ const layoutSettingStore = useLayoutSettingStore()
 
 const handleReflash = () => {
   layoutSettingStore.reflash = !layoutSettingStore.reflash
+}
+
+// 处理全屏 document.fullscreenElement 判断当前页面是否全屏 否: null
+const fullScreen = () => {
+  const full = document.fullscreenElement
+  // 切换为全屏
+  if (!full) {
+    // 利用文档根结点的requestFullscreen()方法可进入全屏
+    document.documentElement.requestFullscreen()
+  } else {
+    document.exitFullscreen()
+  }
+
+  // console.log(document.fullscreenElement)
 }
 </script>
 <script lang="ts">

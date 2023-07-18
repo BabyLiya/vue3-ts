@@ -3,7 +3,7 @@
   <router-view v-slot="{ Component }">
     <transition name="fade">
       <!-- 渲染layout一级路由组件的子路由 -->
-      <component :is="Component" v-if="flag"/>
+      <component :is="Component" v-if="flag" />
     </transition>
   </router-view>
 </template>
@@ -16,14 +16,16 @@ const layoutSettingStore = useLayoutSettingStore()
 let flag = ref(true)
 
 // 监听仓库内部数据是否发生变化
-watch(() => layoutSettingStore.reflash,() => {
-  flag.value = false
-  // nextTick 当响应式数据发生变化后，可以得到更新后的dom
-  nextTick(() => {
-    flag.value = true  // 模板渲染后，再创建回来
-  })
-})
-
+watch(
+  () => layoutSettingStore.reflash,
+  () => {
+    flag.value = false
+    // nextTick 当响应式数据发生变化后，可以得到更新后的dom
+    nextTick(() => {
+      flag.value = true // 模板渲染后，再创建回来
+    })
+  },
+)
 </script>
 <script lang="ts">
 export default {
