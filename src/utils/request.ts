@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import useUserStore from '@/store/modules/user'
+
 
 let request = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API, // 基础路径上会携带/api
@@ -8,6 +10,11 @@ let request = axios.create({
 
 request.interceptors.request.use((config) => {
   // header请求头给服务端携带公共参数
+  const userStore = useUserStore()
+  console.log(userStore.token)
+  if (userStore.token) {
+    config.headers.token = userStore.token
+  }
   return config
 })
 

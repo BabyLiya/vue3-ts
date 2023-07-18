@@ -5,12 +5,12 @@
     <el-button :icon="Aim" circle />
     <img
       style="width: 32px; height: 32px; border-radius: 50%; margin: 0 5px"
-      src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif"
+      :src="userStore.avatar"
       alt=""
     />
     <el-dropdown>
       <span class="el-dropdown-link">
-        admin
+        {{userStore.username}} 
         <el-icon class="el-icon--right">
           <arrow-down />
         </el-icon>
@@ -29,9 +29,11 @@
 </template>
 <script setup lang="ts">
 import { FullScreen, Refresh, Aim } from '@element-plus/icons-vue'
-
+import useUserStore from '@/store/modules/user'
 import useLayoutSettingStore from '@/store/modules/setting'
 const layoutSettingStore = useLayoutSettingStore()
+const userStore = useUserStore()
+console.log(userStore.username)
 
 const handleReflash = () => {
   layoutSettingStore.reflash = !layoutSettingStore.reflash

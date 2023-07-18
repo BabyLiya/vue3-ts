@@ -1,7 +1,7 @@
 // 创建用户相关小仓库
 import { defineStore } from 'pinia'
 // 引入接口
-import { reqLogin } from '@/api/user/index'
+import { reqLogin, reqUserInfo } from '@/api/user/index'
 import type {
   loginForm,
   loginResponseData,
@@ -18,6 +18,8 @@ let useUserStore = defineStore('User', {
     return {
       token: GET_TOKEN(),
       menuRoutes: constantRoute, // 生成菜单所需要的路由
+      username: '',
+      avatar: '',
     }
   },
   // 异步
@@ -35,6 +37,17 @@ let useUserStore = defineStore('User', {
         return Promise.reject(new Error(result.data.message))
       }
     },
+    // 获取用户信息
+    async userInfo() {
+      // 获取用户信息存储到仓库中
+      let res = await reqUserInfo()
+      if (res.code === 200) {
+        this.username = res.data.checkUser.username
+        this.avatar = res.data.checkUser.avatar
+      } else {
+        
+      }
+    }
   },
   getters: {},
 })
