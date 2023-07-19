@@ -7,5 +7,7 @@ enum API {
 }
 
 export const reqTrademark = (page: number, limit: number) => {
-  return request.get<any, TrademarkResponse>(API.TRADEMARK_URL + `${page}/${limit}`)
+  return request.get<any, TrademarkResponse>(
+    API.TRADEMARK_URL + `${page}/${limit}`,
+  )
 }

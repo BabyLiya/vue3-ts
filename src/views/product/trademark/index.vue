@@ -41,7 +41,7 @@
         layout=" prev, pager, next, jumper, ->, sizes, total, "
         :total="total"
         @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
+        @current-change="getTrademarkData"
       />
     </el-card>
   </div>
@@ -64,21 +64,23 @@ let background = ref(true)
 
 let trademarkArr = reactive<Records>([])
 
-const getTrademarkData = async () => {
+const getTrademarkData = async (pager = 1) => {
+  currentPage.value = pager
   const res: TrademarkResponse = await reqTrademark(
-    currentPage.value,
+    currentPage.value, // v-model 自更改
     limit.value,
   )
   if (res.code === 200) {
     total.value = res.data.total
     trademarkArr = res.data.records
-    console.log(trademarkArr)
   }
 }
 
-const handleSizeChange = () => {}
-
-const handleCurrentChange = () => {}
+// 下拉菜单发生变化时触发
+const handleSizeChange = (e: any) => {
+  // 数据量发生变化，页码 -> 1
+  getTrademarkData()
+}
 
 onMounted(() => {
   getTrademarkData()
