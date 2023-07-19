@@ -3,7 +3,11 @@ import { defineStore } from 'pinia'
 // 引入接口
 import { reqLogin, getUserInfo, logout } from '@/api/user/index'
 import { REMOVE_TOKEN } from '@/utils/token'
-import { loginData, loginResponseData, userInfoResponseData } from '@/api/user/type'
+import {
+  loginData,
+  loginResponseData,
+  userInfoResponseData,
+} from '@/api/user/type'
 
 import type { UserState } from './types/types'
 import { SET_TOKEN, GET_TOKEN } from '@/utils/token'

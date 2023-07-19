@@ -2,14 +2,14 @@
 
 // 用户登录接口携带参数的ts类型
 export interface loginData {
-  username: string,
+  username: string
   password: string
 }
 
 // 接口返回数据类型 （都有的ts类型--不一定都带token--成功才有）
 export interface responseData {
-  code: number,
-  message: string,
+  code: number
+  message: string
   ok: boolean
 }
 
@@ -19,14 +19,12 @@ export interface loginResponseData extends responseData {
 }
 
 // 定义获取信息返回的数据类型
-export interface userInfoResponseData extends responseData{
+export interface userInfoResponseData extends responseData {
   data: {
-    routes: string[],
-    buttons: string[],
-    roles: string[],
-    name: string,
-    avatar: string,
+    routes: string[]
+    buttons: string[]
+    roles: string[]
+    name: string
+    avatar: string
   }
 }
-
-
