@@ -29,7 +29,6 @@
           <template #="{ row, column, $index }">
             <el-button :icon="Edit" type="primary" @click=""></el-button>
             <el-button :icon="Delete" type="danger" @click=""></el-button>
-            
           </template>
         </el-table-column>
       </el-table>
@@ -48,29 +47,28 @@
   </div>
 </template>
 <script setup lang="ts">
-import {
-  Delete,
-  Edit,
-} from '@element-plus/icons-vue'
+import { Delete, Edit } from '@element-plus/icons-vue'
 import { Plus } from '@element-plus/icons-vue'
 import { onMounted, reactive, ref } from 'vue'
 import { reqTrademark } from '@/api/product/trademark/index'
+import type { Records, TrademarkResponse } from '@/api/product/trademark/type'
 
 // 当前页码
 const currentPage = ref<number>(1)
 // 每页展示多少数据
 let limit = ref<number>(3)
 
-let total = ref(0)
+let total = ref<number>(0)
 
 let background = ref(true)
 
-let trademarkArr = reactive<any>([])
+let trademarkArr = reactive<Records>([])
 
 const getTrademarkData = async () => {
-  const res = await reqTrademark(currentPage.value, limit.value)
-  // tableData = res.data.records
-  console.log(res)
+  const res: TrademarkResponse = await reqTrademark(
+    currentPage.value,
+    limit.value,
+  )
   if (res.code === 200) {
     total.value = res.data.total
     trademarkArr = res.data.records
