@@ -50,12 +50,9 @@ let useUserStore = defineStore('User', {
     },
     // 退出登录
     userLogout() {
-      this.token = '',
-      this.username = '',
-      this.avatar = ''
+      ;(this.token = ''), (this.username = ''), (this.avatar = '')
       REMOVE_TOKEN()
-    }
-
+    },
   },
   getters: {},
 })

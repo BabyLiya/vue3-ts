@@ -25,7 +25,7 @@
 </template>
 <script setup lang="ts">
 import { FullScreen, Refresh, Aim } from '@element-plus/icons-vue'
-import { useRouter,useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import useUserStore from '@/store/modules/user'
 import useLayoutSettingStore from '@/store/modules/setting'
 
@@ -33,7 +33,6 @@ const layoutSettingStore = useLayoutSettingStore()
 const userStore = useUserStore()
 const router = useRouter()
 const route = useRoute()
-
 
 const handleReflash = () => {
   layoutSettingStore.reflash = !layoutSettingStore.reflash
@@ -54,7 +53,7 @@ const fullScreen = () => {
 // 退出登录
 const logout = () => {
   userStore.userLogout()
-  router.push({path: '/login', query: {redirect: route.path}})
+  router.push({ path: '/login', query: { redirect: route.path } })
 }
 </script>
 <script lang="ts">

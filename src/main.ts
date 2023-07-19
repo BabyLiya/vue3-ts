@@ -12,6 +12,8 @@ import pinia from './store'
 // 引入自定义插件对象： 注册整个项目全局组件
 import globalComponent from '@/components'
 
+import './permission'
+
 import App from '@/App.vue'
 
 const app = createApp(App)
