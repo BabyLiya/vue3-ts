@@ -10,7 +10,6 @@ let request = axios.create({
 request.interceptors.request.use((config) => {
   // header请求头给服务端携带公共参数
   const userStore = useUserStore()
-  console.log(userStore.token)
   if (userStore.token) {
     config.headers.token = userStore.token
   }

@@ -4,7 +4,7 @@ import setting from './setting'
 import nprogress from 'nprogress'
 // 引入进度条样式
 import 'nprogress/nprogress.css'
-nprogress.configure({ showSpinner: false });
+nprogress.configure({ showSpinner: false })
 
 // 同步语句中引入pinia会出错 需要先引入大仓库
 import pinia from '@/store'
@@ -29,9 +29,9 @@ router.beforeEach(async (to: any, from: any, next: any) => {
           await userStore.userInfo()
           next()
         } catch (error) {
-            // token过期 / 用户手动修改token
-            userStore.userLogout()
-            next({path: '/login', query: { redirect: to.path}})
+          // token过期 / 用户手动修改token / 退出登录
+          await userStore.userLogout()
+          next({ path: '/login', query: { redirect: to.path } })
         }
       }
     }
@@ -42,7 +42,6 @@ router.beforeEach(async (to: any, from: any, next: any) => {
       next({ path: '/login', query: { redirect: to.path } })
     }
   }
-  next()
 })
 
 router.afterEach((to: any, from: any) => {

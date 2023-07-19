@@ -81,11 +81,12 @@ const validatorUserName = (rule: any, value: any, callback: any) => {
 const validatorPassword = (rule: any, value: any, callback: any) => {
   // rule: 位校验对象
   // value为文本内容
-  if (value >= 6) {
-    callback()
-  } else {
-    callback(new Error('密码长度至少六位'))
-  }
+  // if (value >= 6) {
+  //   callback()
+  // } else {
+  //   callback(new Error('密码长度至少六位'))
+  // }
+  callback()
 }
 
 const rules = reactive({
