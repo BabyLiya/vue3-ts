@@ -35,13 +35,18 @@
             <el-button
               :icon="Edit"
               type="primary"
-              @click="editTrademark"
-            ></el-button>
-            <el-button
-              :icon="Delete"
-              type="danger"
-              @click="deleteTrademark"
-            ></el-button>
+              @click="($event) => editTrademark(row)"
+            >
+              修改
+            </el-button>
+            <el-popconfirm
+              @confirm="deleteTrademark(row.id)"
+              :title="`是否删除${row.tmName}?`"
+            >
+              <template #reference>
+                <el-button :icon="Delete" type="danger">删除</el-button>
+              </template>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -57,7 +62,11 @@
         @current-change="getTrademarkData"
       />
     </el-card>
-    <el-dialog v-model="dialogVisible" title="添加品牌" width="60%">
+    <el-dialog
+      v-model="dialogVisible"
+      :title="dataForm.id ? '修改品牌' : '添加品牌'"
+      width="60%"
+    >
       <el-form
         label-width="100px"
         ref="formRef"
@@ -101,13 +110,19 @@
 import { Delete, Edit } from '@element-plus/icons-vue'
 import { Plus } from '@element-plus/icons-vue'
 import { onMounted, reactive, ref } from 'vue'
-import { reqTrademark, reqAddTrademark } from '@/api/product/trademark/index'
+import {
+  reqTrademark,
+  reqAddTrademark,
+  reqDeleteTrademark,
+} from '@/api/product/trademark/index'
 import type {
   Records,
   TrademarkResponse,
   Trademark,
 } from '@/api/product/trademark/type'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { nextTick } from 'process'
+
 // 当前页码
 const currentPage = ref<number>(1)
 // 每页展示多少数据
@@ -119,12 +134,14 @@ let background = ref(true)
 let dialogVisible = ref(false)
 
 let trademarkArr = reactive<Records>([])
+let formRef = ref()
 
-const dataForm = reactive({
+const dataForm: Trademark = reactive({
   tmName: '',
   logoUrl: '',
 })
 
+// 获取数据
 const getTrademarkData = async (pager = 1) => {
   currentPage.value = pager
   const res: TrademarkResponse = await reqTrademark(
@@ -137,20 +154,60 @@ const getTrademarkData = async (pager = 1) => {
   }
 }
 
+// 下拉菜单发生变化时触发
+const handleSizeChange = (e: any) => {
+  // 数据量发生变化，页码 -> 1
+  getTrademarkData()
+}
+
 // 添加品牌
 const addTrademark = () => {
   dataForm.tmName = ''
   dataForm.logoUrl = ''
+  dataForm.id = 0
+  // 清除校验 获取更新后的DOM 用nextTick钩子
+  formRef.value?.clearValidate('tmName')
+  formRef.value?.clearValidate('logoUrl')
+  // nextTick(() => {
+  //   formRef.value.clearValidate('tmName')
+  //   formRef.value.clearValidate('logoUrl')
+  // })
   dialogVisible.value = true
 }
 
 // 修改品牌
-const editTrademark = () => {
+const editTrademark = async (row: Trademark) => {
+  formRef.value?.clearValidate('tmName')
+  formRef.value?.clearValidate('logoUrl')
+  // ES6合并对象
+  Object.assign(dataForm, row)
+  // dataForm.id = row.id
+  // dataForm.tmName = row.tmName
+  // dataForm.logoUrl = row.logoUrl
+
   dialogVisible.value = true
 }
 
 // 删除品牌
-const deleteTrademark = () => {}
+const deleteTrademark = async (id: number) => {
+  let res = await reqDeleteTrademark(id)
+  console.log(res)
+  if (res.code === 200) {
+    ElMessage({
+      type: 'success',
+      message: '删除成功',
+    })
+    // 重新获取数据
+    getTrademarkData(
+      trademarkArr.length > 1 ? currentPage.value : currentPage.value - 1,
+    )
+  } else {
+    ElMessage({
+      type: 'error',
+      message: '删除失败',
+    })
+  }
+}
 
 // 取消
 const cancle = () => {
@@ -159,47 +216,28 @@ const cancle = () => {
 
 // 确认
 const confirm = async () => {
+  // 在请求之前对表单进行校验
+  await formRef.value.validate()
   let res: any = await reqAddTrademark(dataForm)
+  console.log(res)
   if (res.code === 200) {
     ElMessage({
-      message: '添加品牌成功',
+      message: dataForm.id ? '修改品牌成功' : '新增品牌成功',
       type: 'success',
     })
     // 再次请求数据
-    getTrademarkData()
+    getTrademarkData(dataForm.id ? currentPage.value : 1)
   } else {
     ElMessage({
-      message: '添加品牌失败',
+      message: dataForm.id ? '修改品牌失败' : '新增品牌失败',
       type: 'error',
     })
   }
   dialogVisible.value = false
 }
 
-const rules = {
-  tmName: [
-    {
-      required: true,
-      message: '品牌名称不能为空',
-      trigger: 'blur',
-    },
-  ],
-  logoUrl: [
-    {
-      required: true,
-      message: '品牌logo不能为空',
-      trigger: 'blur',
-    },
-  ],
-}
-// 下拉菜单发生变化时触发
-const handleSizeChange = (e: any) => {
-  // 数据量发生变化，页码 -> 1
-  getTrademarkData()
-}
-
 // 上传图片组件 -> 在上传图片之前触发， 上传之前可约束文件类型和大小
-const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
+const beforeAvatarUpload: any['beforeUpload'] = (rawFile: any) => {
   // console.log(rawFile)
   if (
     rawFile.type === 'image/png' ||
@@ -213,16 +251,54 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
       message: '上传的文件类型应为png|jpeg|gif',
       type: 'error',
     })
+    return false
   }
 }
 
-const handleAvatarSuccess: UploadProps['onSuccess'] = (
+const handleAvatarSuccess: any['onSuccess'] = (
   response: any,
   uploadFile: any,
 ) => {
   // response为当前上传图片post服务器返回的数据
-  console.log(response, '@@@', uploadFile)
   dataForm.logoUrl = response.data
+  // 图片上传成功后清除图片校验结果
+  formRef.value.clearValidate('logoUrl')
+}
+
+// 品牌自定义校验规则
+const validatorTmName = (rule: any, value: any, callBack: any) => {
+  // 自定义校验规则
+  if (value.trim().length >= 2) {
+    callBack()
+  } else {
+    callBack(new Error('品牌名称数大于等于两位'))
+  }
+}
+
+const validatorlogoUrl = (rule: any, value: any, callBack: any) => {
+  // 上传图片的value为图片地址
+  if (value) {
+    callBack()
+  } else {
+    callBack(new Error('LOGO图片必须上传'))
+  }
+}
+
+const rules = {
+  tmName: [
+    {
+      required: true,
+      trigger: 'blur',
+      validator: validatorTmName,
+    },
+  ],
+  logoUrl: [
+    {
+      required: true,
+      trigger: 'change',
+      validator: validatorlogoUrl,
+    },
+  ],
 }
 
 onMounted(() => {

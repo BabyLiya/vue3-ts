@@ -1,8 +1,9 @@
 // 对外暴露插件
 import SvgIcon from './SvgIcon/index.vue'
 import Pagination from './pagination/index.vue'
+import Category from './category/index.vue'
 
-const allGlobalComponent: any = { SvgIcon, Pagination }
+const allGlobalComponent: any = { SvgIcon, Pagination, Category }
 
 export default {
   // 插件必须为install方法
