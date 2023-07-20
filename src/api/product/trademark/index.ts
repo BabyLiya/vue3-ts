@@ -17,12 +17,12 @@ export const reqTrademark = (page: number, limit: number) => {
   )
 }
 
-// 添加/修改已有接口的方法
+// 添加/修改已有接口的方法 (携带id / 不携带id)
 export const reqAddTrademark = (data: Trademark) => {
   if (data.id) {
     // 修改已有商品数据
-    return request.put<any,any>(API.EDITTRADEMARK_URL,data)
+    return request.put<any, any>(API.EDITTRADEMARK_URL, data)
   } else {
-    return request.post<any,any>(API.ADDTRADEMARK_URL,data)
+    return request.post<any, any>(API.ADDTRADEMARK_URL, data)
   }
 }

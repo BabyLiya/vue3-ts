@@ -57,12 +57,13 @@
         @current-change="getTrademarkData"
       />
     </el-card>
-    <el-dialog
-      v-model="dialogVisible"
-      title="添加品牌"
-      width="60%"
-    >
-      <el-form label-width="100px" ref="formRef" :model="dataForm" :rules="rules">
+    <el-dialog v-model="dialogVisible" title="添加品牌" width="60%">
+      <el-form
+        label-width="100px"
+        ref="formRef"
+        :model="dataForm"
+        :rules="rules"
+      >
         <el-form-item label="品牌名称" prop="tmName">
           <el-input
             v-model="dataForm.tmName"
@@ -78,17 +79,19 @@
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
           >
-            <img v-if="dataForm.logoUrl" :src="dataForm.logoUrl" class="avatar" />
+            <img
+              v-if="dataForm.logoUrl"
+              :src="dataForm.logoUrl"
+              class="avatar"
+            />
             <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
           </el-upload>
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="dialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="dialogVisible = false">
-            确认
-          </el-button>
+          <el-button @click="cancle">取消</el-button>
+          <el-button type="primary" @click="confirm">确认</el-button>
         </span>
       </template>
     </el-dialog>
@@ -99,8 +102,12 @@ import { Delete, Edit } from '@element-plus/icons-vue'
 import { Plus } from '@element-plus/icons-vue'
 import { onMounted, reactive, ref } from 'vue'
 import { reqTrademark, reqAddTrademark } from '@/api/product/trademark/index'
-import type { Records, TrademarkResponse, Trademark } from '@/api/product/trademark/type'
-import { ElNotification } from 'element-plus'
+import type {
+  Records,
+  TrademarkResponse,
+  Trademark,
+} from '@/api/product/trademark/type'
+import { ElMessage } from 'element-plus'
 // 当前页码
 const currentPage = ref<number>(1)
 // 每页展示多少数据
@@ -112,8 +119,6 @@ let background = ref(true)
 let dialogVisible = ref(false)
 
 let trademarkArr = reactive<Records>([])
-
-
 
 const dataForm = reactive({
   tmName: '',
@@ -134,12 +139,41 @@ const getTrademarkData = async (pager = 1) => {
 
 // 添加品牌
 const addTrademark = () => {
+  dataForm.tmName = ''
+  dataForm.logoUrl = ''
   dialogVisible.value = true
 }
 
 // 修改品牌
 const editTrademark = () => {
   dialogVisible.value = true
+}
+
+// 删除品牌
+const deleteTrademark = () => {}
+
+// 取消
+const cancle = () => {
+  dialogVisible.value = false
+}
+
+// 确认
+const confirm = async () => {
+  let res: any = await reqAddTrademark(dataForm)
+  if (res.code === 200) {
+    ElMessage({
+      message: '添加品牌成功',
+      type: 'success',
+    })
+    // 再次请求数据
+    getTrademarkData()
+  } else {
+    ElMessage({
+      message: '添加品牌失败',
+      type: 'error',
+    })
+  }
+  dialogVisible.value = false
 }
 
 const rules = {
@@ -167,23 +201,27 @@ const handleSizeChange = (e: any) => {
 // 上传图片组件 -> 在上传图片之前触发， 上传之前可约束文件类型和大小
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
   // console.log(rawFile)
-  if (rawFile.type === 'image/png' || rawFile.type === 'image/jpeg' || rawFile.type === 'image/gif') {
+  if (
+    rawFile.type === 'image/png' ||
+    rawFile.type === 'image/jpeg' ||
+    rawFile.type === 'image/gif'
+  ) {
     return true
   } else {
-    ElNotification({
-    title: 'Error',
-    message: '上传的文件类型应为png|jpeg|gif',
-    type: 'error',
-  })
+    ElMessage({
+      title: 'Error',
+      message: '上传的文件类型应为png|jpeg|gif',
+      type: 'error',
+    })
   }
 }
 
 const handleAvatarSuccess: UploadProps['onSuccess'] = (
   response: any,
-  uploadFile : any
+  uploadFile: any,
 ) => {
   // response为当前上传图片post服务器返回的数据
-  console.log(response,"@@@",uploadFile)
+  console.log(response, '@@@', uploadFile)
   dataForm.logoUrl = response.data
 }
 
