@@ -26,7 +26,7 @@ let useUserStore = defineStore('User', {
   // 异步
   actions: {
     // 用户登录的方法 (返回promise数据 得到数据用async await)
-    async userLogin(data: loginData) {
+    async userLogin(data: loginData) { 
       let result: loginResponseData = await reqLogin(data)
 
       if (result.code === 200) {

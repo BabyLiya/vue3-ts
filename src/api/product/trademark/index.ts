@@ -10,7 +10,7 @@ enum API {
   // 获取修改接口
   EDITTRADEMARK_URL = '/admin/product/baseTrademark/update',
   // 删除接口
-  DELETETRADEMARK_URL = '/admin/product/baseTrademark/remove'
+  DELETETRADEMARK_URL = '/admin/product/baseTrademark/remove',
 }
 
 export const reqTrademark = (page: number, limit: number) => {
@@ -31,5 +31,5 @@ export const reqAddTrademark = (data: Trademark) => {
 
 // 删除
 export const reqDeleteTrademark = (id: any) => {
-  return request.delete<any,any>(API.DELETETRADEMARK_URL + `/${id}`)
-} 
+  return request.delete<any, any>(API.DELETETRADEMARK_URL + `/${id}`)
+}

@@ -16,13 +16,13 @@
           width="80"
           align="center"
         ></el-table-column>
-        <el-table-column label="品牌名称" prop="tmName" align="center">
-          <template #="{ row, column, $index }">
-            <pre>{{ row.tmName }}</pre>
-          </template>
-        </el-table-column>
+        <el-table-column
+          label="品牌名称"
+          prop="tmName"
+          align="center"
+        ></el-table-column>
         <el-table-column label="品牌LOGO" prop="logoUrl" align="center">
-          <template #="{ row, column, $index }">
+          <template #="{ row,  $index }">
             <img
               :src="row.logoUrl"
               alt=""
@@ -31,7 +31,7 @@
           </template>
         </el-table-column>
         <el-table-column label="品牌操作" align="center">
-          <template #="{ row, column, $index }">
+          <template #="{ row,  $index }">
             <el-button
               :icon="Edit"
               type="primary"
@@ -177,9 +177,10 @@ const addTrademark = () => {
 
 // 修改品牌
 const editTrademark = async (row: Trademark) => {
+  // 填完数据后清除校验提示
   formRef.value?.clearValidate('tmName')
   formRef.value?.clearValidate('logoUrl')
-  // ES6合并对象
+  // ES6合并对象  把row中的属性直接给forms  assign(dataform,row)
   Object.assign(dataForm, row)
   // dataForm.id = row.id
   // dataForm.tmName = row.tmName
@@ -191,7 +192,7 @@ const editTrademark = async (row: Trademark) => {
 // 删除品牌
 const deleteTrademark = async (id: number) => {
   let res = await reqDeleteTrademark(id)
-  console.log(res)
+ console.log(res)
   if (res.code === 200) {
     ElMessage({
       type: 'success',

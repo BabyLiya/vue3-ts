@@ -1,6 +1,7 @@
 // 对外暴露配置路由(常量路由)
 import { RouteRecordRaw } from 'vue-router'
 
+
 export const constantRoute: Array<RouteRecordRaw> = [
   // 登录路由
   {
